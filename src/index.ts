@@ -13,6 +13,8 @@ const __dirname = path.dirname(__filename);
 const fallDownPort = 3000
 const app = express()
 
+app.use(express.json())
+
 // static
 app.use(express.static('public'));
 
