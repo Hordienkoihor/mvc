@@ -2,6 +2,8 @@ import express from "express"
 import {config} from 'dotenv'
 import {fileURLToPath} from 'node:url'
 import * as path from "node:path";
+import mysql from 'mysql2/promise';
+
 
 config()
 
@@ -11,8 +13,10 @@ const __dirname = path.dirname(__filename);
 const fallDownPort = 3000
 const app = express()
 
+// static
 app.use(express.static('public'));
 
+// routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/books/books-page/books-page.html'))
 })
