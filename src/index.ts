@@ -3,6 +3,8 @@ import {config} from 'dotenv'
 import {fileURLToPath} from 'node:url'
 import * as path from "node:path";
 import mysql from 'mysql2/promise';
+import {initDb} from "./db/init.js"
+import {dbPool} from "./config/database.js";
 
 
 config()
@@ -14,6 +16,9 @@ const fallDownPort = 3000
 const app = express()
 
 app.use(express.json())
+
+// initializing db
+await initDb(dbPool)
 
 // static
 app.use(express.static('public'));
