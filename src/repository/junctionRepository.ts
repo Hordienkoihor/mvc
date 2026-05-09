@@ -17,4 +17,16 @@ export class JunctionRepository {
             throw err;
         }
     }
+
+    public async delete(a_id: number, b_id: number) {
+        const query = `DELETE FROM authorBook WHERE a_id = ? AND b_id = ?`;
+
+        try {
+            const [res] = await this.pool.query(query, [a_id, b_id]);
+            return res;
+        } catch (err) {
+            console.log(err)
+            throw err;
+        }
+    }
 }
