@@ -83,4 +83,16 @@ export class BookRepository {
     }
 
 
+    public async getAll(): Promise<Book[]> {
+        const query = `SELECT * FROM books`;
+
+        try {
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query);
+            return data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
 }

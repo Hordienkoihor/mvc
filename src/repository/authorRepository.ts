@@ -1,6 +1,7 @@
 import type {Pool, RowDataPacket} from "mysql2/promise";
 import type {AuthorDto} from "../dto/author.dto.js";
 import type {Author} from "../types/author.type.js";
+import type {Book} from "../types/book.type.js";
 
 export class AuthorRepository {
     constructor(readonly pool: Pool) {
@@ -45,6 +46,18 @@ export class AuthorRepository {
             }
 
             return res[0] as Author;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    public async getAll(): Promise<Author[]> {
+        const query = `SELECT * FROM authors`;
+
+        try {
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Author[]>(query);
+            return data;
         } catch (error) {
             console.log(error);
             throw error;
