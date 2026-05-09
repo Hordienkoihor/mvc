@@ -18,6 +18,9 @@ export async function initDb(pool: Pool) {
 
         const booksQuery = await readFile(path.join(__dirname, '../../src/db/initBooks.sql'), 'utf8');
         await pool.query(booksQuery)
+
+        const junction = await readFile(path.join(__dirname, '../../src/db/initAuthorBook.sql'), 'utf8');
+        await pool.query(junction)
     } catch (err) {
         console.error(err);
     }
