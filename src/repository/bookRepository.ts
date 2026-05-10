@@ -1,6 +1,7 @@
 import type {Pool, RowDataPacket} from "mysql2/promise";
 import type {Book} from "../types/book.type.js";
 import type {BookDto} from "../dto/book.dto.js";
+import type {ResultSetHeader} from "mysql2";
 
 export class BookRepository {
     constructor(readonly pool: Pool) {
@@ -19,7 +20,7 @@ export class BookRepository {
         ]
 
         try {
-            const [res] = await this.pool.query(query, values);
+            const [res, fields] = await this.pool.query<ResultSetHeader>(query, values);
             return res;
         } catch (error) {
             console.log(error);
