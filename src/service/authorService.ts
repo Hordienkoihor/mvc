@@ -21,4 +21,19 @@ export class AuthorService {
             throw err;
         }
     }
+
+    public async delete(id: number) {
+        try {
+            const rep_res = await this.authorRepository.delete(id);
+
+            if (!rep_res) {
+                return {success: false, msg: "Failed to delete author"}
+            }
+
+            return {success: true, id: id};
+        } catch (err) {
+            console.log(err)
+            throw err;
+        }
+    }
 }
