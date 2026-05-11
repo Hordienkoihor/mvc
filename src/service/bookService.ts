@@ -30,6 +30,6 @@ export class BookService {
         const booksOnPage: number = 20;
 
         const books = await this.bookRepository.getInRange(offset, booksOnPage)
-        return {success: true, books: booksOnPage};
+        return {success: true, books: books};
     }
 }
