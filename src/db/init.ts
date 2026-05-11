@@ -21,6 +21,16 @@ export async function initDb(pool: Pool) {
 
         const junction = await readFile(path.join(__dirname, '../../src/db/initAuthorBook.sql'), 'utf8');
         await pool.query(junction)
+
+        const populate = await readFile(path.join(__dirname, '../../src/db/populateWithData.sql'), 'utf8')
+        const [populateAuthor, populateBooks, populateJunction] = populate.split(';')
+
+       if (populateAuthor && populateBooks && populateJunction) {
+           await pool.query(populateAuthor)
+           await pool.query(populateBooks)
+           await pool.query(populateJunction)
+       }
+
     } catch (err) {
         console.error(err);
     }

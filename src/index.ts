@@ -23,6 +23,7 @@ await initDb(dbPool)
 // static
 app.use(express.static('public'));
 
+
 // routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/books/books-page/books-page.html'))
