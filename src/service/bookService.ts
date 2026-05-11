@@ -25,4 +25,11 @@ export class BookService {
             throw err;
         }
     }
+
+    public async getInRange(offset: number) {
+        const booksOnPage: number = 20;
+
+        const books = await this.bookRepository.getInRange(offset, booksOnPage)
+        return {success: true, books: booksOnPage};
+    }
 }

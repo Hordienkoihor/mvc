@@ -96,4 +96,16 @@ export class BookRepository {
         }
     }
 
+    public async getInRange(startId: number, endId: number): Promise<Book[]> {
+        const query = `SELECT * FROM books LIMIT ? OFFSET ?`;
+
+        try {
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [startId, endId]);
+            return data;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
 }
