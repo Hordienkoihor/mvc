@@ -1,4 +1,5 @@
 import type {Pool, RowDataPacket} from "mysql2/promise";
+import type {JunctionLinkType} from "../types/junctionLink.type.js";
 
 export class JunctionRepository {
     constructor(readonly pool: Pool) {
@@ -34,7 +35,7 @@ export class JunctionRepository {
         const query = `SELECT TOP 1 * FROM authorBook WHERE b_id = ?`;
 
         try {
-            const [data, meta] = await this.pool.query<RowDataPacket[] & {b_id: number, a_id: number}>(query, [b_id]);
+            const [data, meta] = await this.pool.query<RowDataPacket[] & JunctionLinkType>(query, [b_id]);
             return data;
         } catch (err) {
             console.log(err)
