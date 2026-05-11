@@ -3,6 +3,9 @@ import type {getRequest} from "../types/getRequest.type.js";
 import type {Request, Response} from "express";
 import ejs from 'ejs'
 import type {BookService} from "../service/bookService.js";
+import type {JunctionRepository} from "../repository/junctionRepository.js";
+import type {AuthorRepository} from "../repository/authorRepository.js";
+import type {Author} from "../types/author.type.js";
 
 export class UserRouter {
     private router: Router;

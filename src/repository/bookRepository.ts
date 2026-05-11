@@ -63,7 +63,10 @@ export class BookRepository {
 
     public async update(id: number, book: BookDto) {
         const query = `UPDATE books
-                       SET b_name = ?, b_desc = ?, b_img = ?, b_year = ? 
+                       SET b_name = ?,
+                           b_desc = ?,
+                           b_img  = ?,
+                           b_year = ?
                        WHERE b_id = ?`
 
         const values = [
@@ -85,7 +88,8 @@ export class BookRepository {
 
 
     public async getAll(): Promise<Book[]> {
-        const query = `SELECT * FROM books`;
+        const query = `SELECT *
+                       FROM books`;
 
         try {
             const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query);
@@ -97,10 +101,19 @@ export class BookRepository {
     }
 
     public async getInRange(startId: number, endId: number): Promise<Book[]> {
-        const query = `SELECT * FROM books LIMIT ? OFFSET ?`;
+        const query = `SELECT b.b_id as id,
+                              b.b_name as name,
+                              b.b_img as img,
+                              b.b_year as year,
+                              GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
+                       FROM books b
+                                LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                                LEFT JOIN authors a ON ab.a_id = a.a_id
+                       GROUP BY b.b_id LIMIT ?
+                       OFFSET ?;`;
 
         try {
-            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [startId, endId]);
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [endId, startId]);
             return data;
         } catch (err) {
             console.log(err);

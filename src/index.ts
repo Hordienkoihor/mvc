@@ -35,6 +35,7 @@ const bookRepository = new BookRepository(dbPool);
 const junctionRepository = new JunctionRepository(dbPool);
 const bookService = new BookService(bookRepository, junctionRepository);
 const userRouter = new UserRouter(bookService);
+
 app.use('/', userRouter.getRouter())
 
 
