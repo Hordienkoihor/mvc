@@ -2,7 +2,7 @@ import type {Pool, RowDataPacket} from "mysql2/promise";
 import type {JunctionLinkType} from "../types/junctionLink.type.js";
 
 export class JunctionRepository {
-    constructor(readonly pool: Pool) {
+    constructor(private readonly pool: Pool) {
         this.pool = pool;
     }
 

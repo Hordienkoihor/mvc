@@ -5,7 +5,7 @@ import type {Book} from "../types/book.type.js";
 import type {ResultSetHeader} from "mysql2";
 
 export class AuthorRepository {
-    constructor(readonly pool: Pool) {
+    constructor(private readonly pool: Pool) {
         this.pool = pool;
     }
 

@@ -4,7 +4,7 @@ import type {BookDto} from "../dto/book.dto.js";
 import type {ResultSetHeader} from "mysql2";
 
 export class BookRepository {
-    constructor(readonly pool: Pool) {
+    constructor(private readonly pool: Pool) {
         this.pool = pool;
     }
 
