@@ -101,19 +101,68 @@ export class BookRepository {
     }
 
     public async getInRange(startId: number, endId: number): Promise<Book[]> {
-        const query = `SELECT b.b_id as id,
+        const query = `SELECT b.b_id   as id,
                               b.b_name as name,
-                              b.b_img as img,
+                              b.b_img  as img,
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
                        FROM books b
-                                LEFT JOIN authorBook ab ON b.b_id = ab.b_id
-                                LEFT JOIN authors a ON ab.a_id = a.a_id
+                           LEFT JOIN authorBook ab
+                       ON b.b_id = ab.b_id
+                           LEFT JOIN authors a ON ab.a_id = a.a_id
                        GROUP BY b.b_id LIMIT ?
                        OFFSET ?;`;
 
         try {
             const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [endId, startId]);
+            return data;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    public async searchWithRange(startId: number, endId: number, prompt: string): Promise<Book[]> {
+        const searchPattern = `%${prompt}%`;
+
+        const query = `SELECT b.b_id   as id,
+                              b.b_name as name,
+                              b.b_img  as img,
+                              b.b_year as year,
+                              GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
+                       FROM books b
+                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authors a ON ab.a_id = a.a_id
+                       WHERE B.b_name LIKE ?
+                       GROUP BY b.b_id LIMIT ?
+                       OFFSET ?;`;
+
+        try {
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [searchPattern, endId, startId]);
+            return data;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+
+    public async search(prompt: string): Promise<Book[]> {
+        const searchPattern = `%${prompt}%`;
+
+        const query = `SELECT b.b_id   as id,
+                              b.b_name as name,
+                              b.b_img  as img,
+                              b.b_year as year,
+                              GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
+                       FROM books b
+                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authors a ON ab.a_id = a.a_id
+                       WHERE B.b_name LIKE ?
+                       GROUP BY b.b_id;`;
+
+        try {
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [searchPattern]);
             return data;
         } catch (err) {
             console.log(err);

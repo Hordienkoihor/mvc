@@ -26,7 +26,16 @@ export class UserRouter {
         const search = req.query.search || "";
         const limit = 20;
 
-        const result = await this.bookService.getInRange(offset)
+        // if (search.length > 0) {
+        //     const result =
+        // } else {
+        //     const result =
+        // }
+
+        const result = search.length > 0
+            ? await this.bookService.searchInRange(offset, search)
+            : await this.bookService.getInRange(offset)
+
         const books = result.books
 
         res.render('books-page', {

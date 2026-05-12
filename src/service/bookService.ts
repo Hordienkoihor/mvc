@@ -27,9 +27,24 @@ export class BookService {
     }
 
     public async getInRange(offset: number) {
-        const booksOnPage: number = 20;
+        const booksOnPage: number = 18;
 
         const books = await this.bookRepository.getInRange(offset, booksOnPage)
         return {success: true, books: books};
     }
+
+    public async searchInRange(offset: number, prompt: string) {
+        if (!prompt) {
+            return {success: false, msg: "User prompt is required"}
+        }
+
+        if (prompt.length === 0) {
+            return {success: false, msg: "No books with empty name"}
+        }
+
+        const booksOnPage: number = 18;
+        const books = await this.bookRepository.searchWithRange(offset, booksOnPage, prompt);
+        return {success: true, books: books}
+    }
+
 }
