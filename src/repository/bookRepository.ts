@@ -43,9 +43,16 @@ export class BookRepository {
     }
 
     public async get(id: number): Promise<Book> {
-        const query = `SELECT *
-                       FROM books
-                       WHERE b_id = ?`;
+        const query = `SELECT b.b_id   as id,
+                              b.b_name as name,
+                              b.b_desc as description,
+                              b.b_img  as img,
+                              b.b_year as year,
+                              GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
+                       FROM books b
+                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authors a ON ab.a_id = a.a_id
+                       WHERE b.b_id = ?`;
 
         try {
             const [res] = await this.pool.query<RowDataPacket[]>(query, [id]);
@@ -103,6 +110,7 @@ export class BookRepository {
     public async getInRange(startId: number, endId: number): Promise<Book[]> {
         const query = `SELECT b.b_id   as id,
                               b.b_name as name,
+                              b.b_desc as description,
                               b.b_img  as img,
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
@@ -127,6 +135,7 @@ export class BookRepository {
 
         const query = `SELECT b.b_id   as id,
                               b.b_name as name,
+                              b.b_desc as description,
                               b.b_img  as img,
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
@@ -152,6 +161,7 @@ export class BookRepository {
 
         const query = `SELECT b.b_id   as id,
                               b.b_name as name,
+                              b.b_desc as description,
                               b.b_img  as img,
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author

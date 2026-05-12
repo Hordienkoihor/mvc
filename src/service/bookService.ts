@@ -47,4 +47,19 @@ export class BookService {
         return {success: true, books: books}
     }
 
+    public async getById(bookId: number) {
+        try {
+            const result = await this.bookRepository.get(bookId)
+
+            if (!result) {
+                return {success: false, msg: "No book with id " + bookId}
+            }
+
+            return {success: true, book: result}
+        } catch (err) {
+            console.log(err)
+            return {success: false, msg: "error on repository (get by id)"}
+        }
+    }
+
 }
