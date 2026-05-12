@@ -4,7 +4,7 @@ import type {BookDto} from "../dto/book.dto.js";
 import type {ResultSetHeader} from "mysql2";
 
 export class BookService {
-    constructor(readonly bookRepository: BookRepository, readonly junctionRepository: JunctionRepository) {
+    constructor(private readonly bookRepository: BookRepository, private readonly junctionRepository: JunctionRepository) {
     }
 
     public async add(dto: BookDto, authorId: number) {

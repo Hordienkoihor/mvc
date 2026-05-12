@@ -51,7 +51,6 @@ export class UserRouter {
             return res.status(404).json({message: "Failed to parse an id: " + bookId})
         }
 
-        console.log(bookId)
         const result = await this.bookService.getById(bookId)
 
         if (!result.success) {
@@ -59,7 +58,6 @@ export class UserRouter {
         }
 
         const book = result.book
-
         res.render('book-page', {
             book,
         })
