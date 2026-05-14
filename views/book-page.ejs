@@ -14,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" crossorigin="anonymous"/>
 
-    <link rel="shortcut icon" href="http://localhost:5050/book/favicon.ico">
+    <link rel="shortcut icon" href="http://localhost:5050/books/book-page_files/favicon.ico">
 </head>
 
 <body data-gr-c-s-loaded="true" class="">
@@ -47,7 +47,7 @@
                                         }
                                     })
                                 </script>
-                                <div class="loader"><img src="./book-page_files/loading.gif"></div>
+                                <div class="loader"><img src="book-page/book-page_files/loading.gif"></div>
                                 <div id="list" size="" class="bAutoComplete mSearchAutoComplete"></div>
                             </div>
                         </form>
@@ -66,7 +66,8 @@
             <script id="pattern" type="text/template">
                 <div data-book-id="{id}" class="book_item col-xs-6 col-sm-3 col-md-2 col-lg-2">
                     <div class="book">
-                        <a href="/book/{id}"><img src="img/books/{id}.jpg" alt="{title}">
+                        <a href="/books/book-page/book-page_files/{id}">
+                            <img src="books/book-page/book-page_files/{id}.jpg" alt="{title}">
                             <div data-title="{title}" class="blockI">
                                 <div data-book-title="{title}" class="title size_text">{title}</div>
                                 <div data-book-author="{author}" class="author">{author}</div>
@@ -80,7 +81,7 @@
             </script>
             <div id="id" book-id="<%= book.id%>">
                 <div id="bookImg" class="col-xs-12 col-sm-3 col-md-3 item">
-                    <img src="images/<%= book.img%>" alt="Responsive image" class="img-responsive">
+                    <img src="book-page/book-page_files/<%= book.img%>" alt="Responsive image" class="img-responsive">
                     <hr>
                 </div>
                 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 info">
@@ -113,7 +114,7 @@
                 </div>
             </div>
 
-            <script src="./book-page_files/book.js" defer=""></script>
+            <script src="book-page/book-page_files/book.js" defer=""></script>
         </div>
     </div>
 </section>

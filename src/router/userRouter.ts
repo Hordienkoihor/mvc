@@ -18,7 +18,7 @@ export class UserRouter {
 
     private setupRoutes() {
         this.router.get("/", this.getDefault.bind(this));
-        this.router.get("/:id", this.getBookPage.bind(this));
+        this.router.get("/books/:id", this.getBookPage.bind(this));
     }
 
 

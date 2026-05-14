@@ -79,14 +79,14 @@
             <% books.forEach(function (book) { %>
                 <div data-book-id="<%= book.id %>" class="book_item col-xs-6 col-sm-3 col-md-2 col-lg-2">
                     <div class="book">
-                        <a href="book/<%= book.id %>">
-                            <img src="images/<%= book.img %>" alt="<%= book.name %>">
+                        <a href="books/<%= book.id %>">
+                            <img src="books/books-page/books-page_files/<%= book.img %>" alt="<%= book.name %>">
                             <div data-title="<%= book.name %>" class="blockI" style="height: 46px;">
                                 <div class="title size_text"><%= book.name %></div>
                                 <div class="author"><%= book.author %></div>
                             </div>
                         </a>
-                        <a href="book/<%= book.id %>">
+                        <a href="books/<%= book.id %>">
                             <button type="button" class="details btn btn-success">Читать</button>
                         </a>
                     </div>
