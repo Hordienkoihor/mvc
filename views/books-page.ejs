@@ -43,7 +43,15 @@
                                     $("#search").bind("keypress", function (e) {
                                         if (e.keyCode == 13) {
                                             e.preventDefault();
-                                            alert("а вот это придется сделать самому. Ваш @rshmelev");
+                                            (function (){
+                                                const prompt = document.getElementById("search").value;
+                                                // fetch(`http://localhost:5050/?search=${prompt}`, {
+                                                //     method: 'GET',
+                                                // })
+
+                                                window.location.href =`http://localhost:5050/?search=${prompt}`
+                                            })()
+
                                         }
                                     })
                                 </script>
