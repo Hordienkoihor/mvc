@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>library admin panel</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body>
+<section id="header" class="header-wrapper">
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="col-xs-5 col-sm-2 col-md-2 col-lg-2">
+                <div class="logo"><a href="http://localhost:5050/" class="navbar-brand"><span class="sh">Ш</span><span
+                                class="plus">++</span></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-8 col-lg-8">
+                <div class="main-menu">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2 col-sm-3 col-md-2 col-lg-2 hidden-xs">
+                <button type="button" class="btn navbar-btn" id="btn-auth">Вхід</button>
+            </div>
+        </div>
+    </nav>
+</section>
+
+<main class="container">
+    <div id="main-wrapper" style="display: flex; flex-direction: row;">
+        <div id="main-left" style="flex:2;">
+            <form id="add-book-form" style="padding: 50px; border: 1px solid lightgray;">
+                <div class="form-group">
+                    <label for="bookName">Назва книги</label>
+                    <input type="text" class="form-control" id="bookName" aria-describedby="emailHelp"
+                           placeholder="введіть назву книги">
+                </div>
+                <div class="form-group">
+                    <label for="bookDescription">Опис книги</label>
+                    <textarea type="text" class="form-control" id="bookDescription" aria-describedby="emailHelp"
+                           placeholder="введіть опис книги"> </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="bookYear">Рік видавництва</label>
+                    <input type="number" class="form-control" id="bookYear" placeholder="введіть рік видавництва">
+                </div>
+                <div class="form-group">
+                    <label for="bookImg">Фото книги</label>
+                    <input type="file" class="form-control-file" id="bookImg" placeholder="Завантажте фото книги">
+                    <img id="previewImg" alt="imgPreview" style="display: none;">
+                </div>
+
+                <div class="form-group">
+                    <label for="bookAuthor">Автор книги</label>
+                    <select class="form-control" id="bookAuthor">
+                        <!--                        ejs her-->
+                        <!--                        <option selected>Jane Down</option>-->
+                        <!--                        <option>Shakespeare</option>-->
+                        <!--                        <option>Socrates</option>-->
+
+                        <% authors.forEach(function (author){ %>
+                            <option value="<%= author.id %>"><%= author.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+
+            <form id="add-author-id" style="margin-top: 50px; padding: 50px; border: 1px solid lightgray;">
+                <div class="form-group">
+                    <label for="authorName">ПІБ автора</label>
+                    <input id="authorName" type="text" class="form-control" placeholder="введіть ім'я автора">
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+
+        <div id="main-right" style="flex:2">
+            <!--            ejs here-->
+
+            <% books.forEach(function(book) { %>
+                <div style="align-items: center; display: flex; flex-direction: column; border: 1px solid lightgray; margin-left: 20px">
+                    <div id="book-<%= book.id %>" class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="books/books-page/books-page_files/<%= book.img %>"
+                             alt="<%= book.name %>">
+                        <div class="card-body">
+                            <h5 data-title="<%= book.name %>" class="card-title"><%= book.name %></h5>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#bookModal">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</main>
+
+</body>
+<script>
+    const imageInput = document.getElementById('bookImg');
+    imageInput.addEventListener('change', previewImage);
+
+    function previewImage(event) {
+        const fr = new FileReader();
+        fr.onload = function () {
+            const img = document.getElementById('previewImg');
+            img.src = fr.result;
+            img.style.display = 'block';
+        }
+        fr.readAsDataURL(event.target.files[0]);
+    }
+
+    document.getElementById('add-author-id').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const authorName = document.getElementById('bookName').value;
+
+        try {
+            const response = await fetch('http://localhost:5050/book/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        name: authorName,
+                    }
+                ),
+            })
+
+            const data = await response.json();
+
+            if (response.status === 200) {
+                alert("Автора додано успішно")
+            } else {
+                alert("Помилка додавання автора" + data.message)
+            }
+        } catch (e) {
+            alert(e)
+        }
+    });
+
+    document.getElementById('add-book-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append('name', document.getElementById('bookName').value);
+        formData.append('description', document.getElementById('bookDescription').value);
+        formData.append('year', document.getElementById('bookYear').value);
+        formData.append('img', document.getElementById('bookImg').files[0]);
+        formData.append('author', document.getElementById('authorName').value);
+
+        try {
+            const response = await fetch('api/books/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: formData,
+            })
+
+            const data = await response.json();
+
+            if (response.status === 200) {
+                alert("Книгу додано успішно")
+            } else {
+                alert("Помилка додавання книги" + data.message)
+            }
+        } catch (e) {
+            alert(e)
+        }
+    });
+
+    document.getElementById('main-right').addEventListener('click', async function (e) {
+        if (e.target.classList.contains('btn-danger')) {
+            const card = e.target.closest('.card');
+            const bookId = card.id.replace('book-', '');
+
+            try {
+                const response = await fetch('api/books/delete', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        id: bookId,
+                    })
+                })
+
+                const data = await response.json();
+
+                if (response.status === 200) {
+                    alert("Книгу видалено успішно")
+                } else {
+                    alert("Помилка видалення книги" + data.message)
+                }
+
+            } catch (e) {
+                alert(e)
+            }
+        }
+    })
+
+</script>
+</html>
