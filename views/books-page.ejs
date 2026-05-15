@@ -157,20 +157,22 @@
     const queries = document.location.search
     const params = new URLSearchParams(queries)
 
-    let offset = +params.get('offset')
-    console.log(offset)
     const booksOnPage = 20;
     const Direction = {
         FORWARD: 1,
         BACK: 0
     }
 
+    let offset = +params.get('offset')
+    let search = params.get('search')
+
+    let link;
+
+
     function move(dir) {
         if (dir === Direction.FORWARD) {
             offset = offset + booksOnPage;
 
-            document.location.href = `http://localhost:5050/?offset=${offset}`;
-            return;
         }
 
         if (dir === Direction.BACK) {
@@ -179,10 +181,13 @@
             }
 
             offset = offset - booksOnPage;
-            document.location.href = `http://localhost:5050/?offset=${offset}`;
-            return;
         }
 
+        if (search) {
+            document.location.href = `http://localhost:5050/?offset=${offset}&search=${search}`;
+        } else {
+            document.location.href = `http://localhost:5050/?offset=${offset}`;
+        }
 
     }
 </script>
