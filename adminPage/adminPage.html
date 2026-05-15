@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>library admin panel</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body>
+<section id="header" class="header-wrapper">
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="col-xs-5 col-sm-2 col-md-2 col-lg-2">
+                <div class="logo"><a href="http://localhost:5050/" class="navbar-brand"><span class="sh">Ш</span><span
+                        class="plus">++</span></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-8 col-lg-8">
+                <div class="main-menu">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2 col-sm-3 col-md-2 col-lg-2 hidden-xs">
+                <button type="button" class="btn navbar-btn" id="btn-auth">Вхід</button>
+            </div>
+        </div>
+    </nav>
+</section>
+
+<main class="container">
+    <div id="main-wrapper" style="display: flex; flex-direction: row;">
+        <div id="main-left" style="flex:2">
+            <form>
+                <div class="form-group">
+                    <label for="bookName">Назва книги</label>
+                    <input type="text" class="form-control" id="bookName" aria-describedby="emailHelp" placeholder="введіть назву книги">
+                </div>
+                <div class="form-group">
+                    <label for="bookYear">Рік видавництва</label>
+                    <input type="number" class="form-control" id="bookYear" placeholder="введіть рік видавництва">
+                </div>
+                <div class="form-group">
+                    <label for="bookImg">Фото книги</label>
+                    <input type="file" class="form-control-file" id="bookImg" placeholder="Завантажте фото книги">
+                    <img id="previewImg" alt="imgPreview" style="display: none;">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div id="main-right" style="flex:2">
+
+        </div>
+    </div>
+</main>
+
+</body>
+<script>
+    const imageInput = document.getElementById('bookImg');
+    imageInput.addEventListener('change', previewImage);
+
+    function previewImage(event) {
+        const fr = new FileReader();
+        fr.onload = function () {
+            const img = document.getElementById('previewImg');
+            img.src = fr.result;
+            img.style.display = 'block';
+        }
+        fr.readAsDataURL(event.target.files[0]);
+    }
+</script>
+</html>
