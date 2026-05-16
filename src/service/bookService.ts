@@ -17,7 +17,8 @@ export class BookService {
                 return {success: false, msg: "Failed to add a book"}
             }
 
-            const junction_res = await this.junctionRepository.add(book_id, authorId)
+            console.log(`Inserting into authorbook: book_id = ${book_id}, authorId = ${authorId}`);
+            const junction_res = await this.junctionRepository.add(authorId, book_id)
 
             return {success: true, id: book_id}
         } catch (err) {

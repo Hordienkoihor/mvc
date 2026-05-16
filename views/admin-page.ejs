@@ -58,7 +58,7 @@
 
                 <div class="form-group">
                     <label for="bookAuthor">Автор книги</label>
-                    <select class="form-control" id="bookAuthor">
+                    <select class="form-control" id="bookAuthor" >
                         <!--                        ejs her-->
                         <!--                        <option selected>Jane Down</option>-->
                         <!--                        <option>Shakespeare</option>-->
@@ -124,7 +124,7 @@
         const authorName = document.getElementById('bookName').value;
 
         try {
-            const response = await fetch('http://localhost:5050/book/add', {
+            const response = await fetch('http://localhost:5050/book/add-book', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(
@@ -155,12 +155,13 @@
         formData.append('description', document.getElementById('bookDescription').value);
         formData.append('year', document.getElementById('bookYear').value);
         formData.append('img', document.getElementById('bookImg').files[0]);
-        formData.append('author', document.getElementById('authorName').value);
+        formData.append('author', document.getElementById('bookAuthor').value);
+
+
 
         try {
-            const response = await fetch('api/books/add', {
+            const response = await fetch('admin/api/v1/add-book', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
                 body: formData,
             })
 

@@ -2,17 +2,48 @@ import type {AuthorService} from "../service/authorService.js";
 import type {BookService} from "../service/bookService.js";
 import express, {type Router} from "express";
 import type {Request, Response} from "express";
+import type {Book} from "../types/book.type.js";
+import multer, {type Multer} from "multer"
+import type {BookDto} from "../dto/book.dto.js";
 
 export class AdminRouter {
     private readonly router: Router;
+    private readonly multer: Multer;
+    private readonly uploadBook;
+    // private readonly uploadBooks;
+
+    private storageBook = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, "public/books/book-page/book-page_files");
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.originalname);
+        }
+    })
+
+    // private storageBooks = multer.diskStorage({
+    //     destination: function (req, file, cb) {
+    //         cb(null, "public/books/books-page/books-page_files");
+    //     },
+    //     filename: function (req, file, cb) {
+    //         cb(null, file.originalname);
+    //     }
+    // })
 
     constructor(private readonly authorService: AuthorService, private readonly bookService: BookService) {
         this.router = express.Router();
+
+        this.multer = multer({dest: 'public/uploads'})
+
+        this.uploadBook = multer({storage: this.storageBook})
+        // this.uploadBooks = multer({storage: this.storageBooks})
+
         this.setupRoutes()
     }
 
     private setupRoutes(): void {
         this.router.get("/", this.getDefault.bind(this))
+        this.router.post("/api/v1/add-book", this.uploadBook.single('img'),  this.addBook.bind(this))
     }
 
     private async getDefault(req: Request, res: Response) {
@@ -38,7 +69,41 @@ export class AdminRouter {
 
     }
 
+    public async addBook(req: Request, res: Response) {
+        const book = req.body as Book
+        console.log(book)
+
+        if (!book.author) {
+            return res.status(400).json({message:"No author specified"})
+        }
+
+        const fileDat = req.file
+
+        if (!fileDat) {
+            return res.status(400).json({message:"No file uploaded"})
+        }
+
+        const authorId = book.author;
+
+        const bookDto: BookDto = {
+            name: book.name,
+            description: book.description,
+            image: fileDat.filename,
+            author: authorId,
+            year: book.year ? book.year : '2000',
+        }
+
+        const status = await this.bookService.add(bookDto, parseInt(authorId))
+
+        if (!status.success) {
+            return res.status(500).json({message:status.msg})
+        }
+
+        return res.status(200).json({success:true})
+    }
+
     public getRouter(): Router {
         return this.router;
     }
+
 }
