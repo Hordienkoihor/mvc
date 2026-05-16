@@ -62,4 +62,19 @@ export class BookService {
         }
     }
 
+    public async getAll() {
+        try {
+            const result = await this.bookRepository.getAll();
+
+            if (!result) {
+                return {success: false, msg: "No books in the database"}
+            }
+
+            return {success: true, books: result}
+        } catch (err) {
+            console.log(err)
+            return {success: false, msg: "error on repository (getAll)"}
+        }
+    };
+
 }

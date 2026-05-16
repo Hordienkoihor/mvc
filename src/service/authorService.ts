@@ -1,6 +1,7 @@
 import type {AuthorRepository} from "../repository/authorRepository.js";
 import type {AuthorDto} from "../dto/author.dto.js";
 import type {ResultSetHeader} from "mysql2";
+import type {Author} from "../types/author.type.js";
 
 export class AuthorService {
     constructor(private readonly authorRepository: AuthorRepository) {
@@ -31,6 +32,21 @@ export class AuthorService {
             }
 
             return {success: true, id: id};
+        } catch (err) {
+            console.log(err)
+            throw err;
+        }
+    }
+
+    public async getAll() {
+        try {
+            const rep_res = await this.authorRepository.getAll();
+
+            if (!rep_res) {
+                return {success: false, msg: "Failed to retrieve authors"}
+            }
+
+            return {success: true, authors: rep_res};
         } catch (err) {
             console.log(err)
             throw err;

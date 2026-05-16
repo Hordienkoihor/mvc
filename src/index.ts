@@ -9,6 +9,9 @@ import {UserRouter} from "./router/userRouter.js";
 import {BookRepository} from "./repository/bookRepository.js";
 import {BookService} from "./service/bookService.js";
 import {JunctionRepository} from "./repository/junctionRepository.js";
+import {AdminRouter} from "./admin/adminRouter.js";
+import {AuthorRepository} from "./repository/authorRepository.js";
+import {AuthorService} from "./service/authorService.js";
 
 
 config()
@@ -33,10 +36,18 @@ app.set('views', path.join(process.cwd(), 'views'));
 
 const bookRepository = new BookRepository(dbPool);
 const junctionRepository = new JunctionRepository(dbPool);
+const authorRepository = new AuthorRepository(dbPool);
+
 const bookService = new BookService(bookRepository, junctionRepository);
 const userRouter = new UserRouter(bookService);
+const authorService = new AuthorService(authorRepository);
 
 app.use('/', userRouter.getRouter())
+
+/* test admin page router */
+
+const adminRouter = new AdminRouter(authorService, bookService);
+app.use('/admin', adminRouter.getRouter())
 
 
 // // routes
