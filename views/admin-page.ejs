@@ -70,7 +70,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button id="bookAddButton" type="submit" class="btn btn-success">Submit</button>
             </form>
 
             <form id="add-author-id" style="margin-top: 50px; padding: 50px; border: 1px solid lightgray;">
@@ -79,7 +79,7 @@
                     <input id="authorName" type="text" class="form-control" placeholder="введіть ім'я автора">
                 </div>
 
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button id="authorAddButton" type="submit" class="btn btn-success">Submit</button>
             </form>
         </div>
 
@@ -121,10 +121,10 @@
 
     document.getElementById('add-author-id').addEventListener('submit', async function (e) {
         e.preventDefault();
-        const authorName = document.getElementById('bookName').value;
+        const authorName = document.getElementById('authorName').value;
 
         try {
-            const response = await fetch('http://localhost:5050/book/add-book', {
+            const response = await fetch('http://localhost:5050/admin/api/v1/author/add-author', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(
@@ -160,7 +160,7 @@
 
 
         try {
-            const response = await fetch('admin/api/v1/add-book', {
+            const response = await fetch('admin/api/v1/book/add-book', {
                 method: 'POST',
                 body: formData,
             })
@@ -181,10 +181,11 @@
         if (e.target.classList.contains('btn-danger')) {
             const card = e.target.closest('.card');
             const bookId = card.id.replace('book-', '');
+            console.log(bookId)
 
             try {
-                const response = await fetch('api/books/delete', {
-                    method: 'POST',
+                const response = await fetch('admin/api/v1/book/delete-book', {
+                    method: 'DELETE',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         id: bookId,

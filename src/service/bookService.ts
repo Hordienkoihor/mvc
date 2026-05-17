@@ -27,6 +27,24 @@ export class BookService {
         }
     }
 
+    public async delete(id: number) {
+        try {
+            const bookRepRes: ResultSetHeader = await this.bookRepository.delete(id)
+
+            if (bookRepRes.affectedRows === 0) {
+                return {success: false, msg: "No books with this id found for deletion"}
+            }
+
+            // const junctionRepRes: ResultSetHeader = await this.junctionRepository.delete(id)
+
+            return {success: true, id: id};
+
+        } catch (e) {
+            console.log(e)
+            throw e;
+        }
+    }
+
     public async getInRange(offset: number) {
         const booksOnPage: number = 18;
 

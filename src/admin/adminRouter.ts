@@ -5,6 +5,7 @@ import type {Request, Response} from "express";
 import type {Book} from "../types/book.type.js";
 import multer, {type Multer} from "multer"
 import type {BookDto} from "../dto/book.dto.js";
+import type {AuthorDto} from "../dto/author.dto.js";
 
 export class AdminRouter {
     private readonly router: Router;
@@ -43,7 +44,9 @@ export class AdminRouter {
 
     private setupRoutes(): void {
         this.router.get("/", this.getDefault.bind(this))
-        this.router.post("/api/v1/add-book", this.uploadBook.single('img'),  this.addBook.bind(this))
+        this.router.post("/api/v1/book/add-book", this.uploadBook.single('img'),  this.addBook.bind(this))
+        this.router.delete("/api/v1/book/delete-book", this.deleteBook.bind(this))
+        this.router.post("/api/v1/author/add-author", this.addAuthor.bind(this))
     }
 
     private async getDefault(req: Request, res: Response) {
@@ -99,7 +102,40 @@ export class AdminRouter {
             return res.status(500).json({message:status.msg})
         }
 
-        return res.status(200).json({success:true})
+        return res.status(200).json({success:true, id: status.id})
+    }
+
+    private async addAuthor(req: Request, res: Response) {
+        const author = req.body as AuthorDto
+
+        if (!author) {
+            return res.status(400).json({message:"No author specified"})
+        }
+
+        const status = await this.authorService.add(author)
+
+        if (!status.success) {
+            return res.status(500).json({message: status.msg})
+        }
+
+        return res.status(200).json({success:true, id: status.id})
+    }
+
+    private async deleteBook(req: Request, res: Response) {
+        const bookId = parseInt(req.body.id)
+
+        if (!bookId) {
+            return res.status(400).json({message:"No bookId specified"})
+        }
+
+        const status =  await this.bookService.delete(bookId)
+
+        if (!status.success) {
+            return res.status(500).json({message: "internal server error"})
+        }
+
+        return res.status(200).json({message: "book deleted successfully"})
+
     }
 
     public getRouter(): Router {

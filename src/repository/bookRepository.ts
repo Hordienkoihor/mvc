@@ -34,7 +34,7 @@ export class BookRepository {
                        WHERE b_id = ?`;
 
         try {
-            const [res] = await this.pool.query(query, [id]);
+            const [res] = await this.pool.query<ResultSetHeader>(query, [id]);
             return res;
         } catch (error) {
             console.log(error);
