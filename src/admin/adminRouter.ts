@@ -6,6 +6,7 @@ import type {Book} from "../types/book.type.js";
 import multer, {type Multer} from "multer"
 import type {BookDto} from "../dto/book.dto.js";
 import type {AuthorDto} from "../dto/author.dto.js";
+import basicAuth from "express-basic-auth";
 
 export class AdminRouter {
     private readonly router: Router;
@@ -33,6 +34,12 @@ export class AdminRouter {
 
     constructor(private readonly authorService: AuthorService, private readonly bookService: BookService) {
         this.router = express.Router();
+
+        this.router.use(basicAuth({
+            users: {'librarian': 'lkey'},
+            challenge: true
+
+        }))
 
         this.multer = multer({dest: 'public/uploads'})
 
