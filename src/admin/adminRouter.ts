@@ -36,7 +36,10 @@ export class AdminRouter {
         this.router = express.Router();
 
         this.router.use(basicAuth({
-            users: {'librarian': 'lkey'},
+            users: {
+                'librarian': 'lkey',
+                'logout': 'working'
+            },
             challenge: true
 
         }))
@@ -51,15 +54,16 @@ export class AdminRouter {
 
     private setupRoutes(): void {
         this.router.get("/", this.getDefault.bind(this))
-        this.router.post("/api/v1/book/add-book", this.uploadBook.single('img'),  this.addBook.bind(this))
+        this.router.post("/api/v1/book/add-book", this.uploadBook.single('img'), this.addBook.bind(this))
         this.router.delete("/api/v1/book/delete-book", this.deleteBook.bind(this))
         this.router.post("/api/v1/author/add-author", this.addAuthor.bind(this))
+        this.router.get("/logout", this.logout.bind(this))
     }
 
     private async getDefault(req: Request, res: Response) {
         const bookFetchResult = await this.bookService.getAll()
 
-        if  (!bookFetchResult.success) {
+        if (!bookFetchResult.success) {
             return res.status(401).json({message: bookFetchResult.msg})
         }
 
@@ -84,13 +88,13 @@ export class AdminRouter {
         console.log(book)
 
         if (!book.author) {
-            return res.status(400).json({message:"No author specified"})
+            return res.status(400).json({message: "No author specified"})
         }
 
         const fileDat = req.file
 
         if (!fileDat) {
-            return res.status(400).json({message:"No file uploaded"})
+            return res.status(400).json({message: "No file uploaded"})
         }
 
         const authorId = book.author;
@@ -106,17 +110,17 @@ export class AdminRouter {
         const status = await this.bookService.add(bookDto, parseInt(authorId))
 
         if (!status.success) {
-            return res.status(500).json({message:status.msg})
+            return res.status(500).json({message: status.msg})
         }
 
-        return res.status(200).json({success:true, id: status.id})
+        return res.status(200).json({success: true, id: status.id})
     }
 
     private async addAuthor(req: Request, res: Response) {
         const author = req.body as AuthorDto
 
         if (!author) {
-            return res.status(400).json({message:"No author specified"})
+            return res.status(400).json({message: "No author specified"})
         }
 
         const status = await this.authorService.add(author)
@@ -125,17 +129,17 @@ export class AdminRouter {
             return res.status(500).json({message: status.msg})
         }
 
-        return res.status(200).json({success:true, id: status.id})
+        return res.status(200).json({success: true, id: status.id})
     }
 
     private async deleteBook(req: Request, res: Response) {
         const bookId = parseInt(req.body.id)
 
         if (!bookId) {
-            return res.status(400).json({message:"No bookId specified"})
+            return res.status(400).json({message: "No bookId specified"})
         }
 
-        const status =  await this.bookService.delete(bookId)
+        const status = await this.bookService.delete(bookId)
 
         if (!status.success) {
             return res.status(500).json({message: "internal server error"})
@@ -143,6 +147,14 @@ export class AdminRouter {
 
         return res.status(200).json({message: "book deleted successfully"})
 
+    }
+
+    private async logout(req: Request, res: Response) {
+        // delete req.headers['authorization']
+
+        res.set('www-authenticate', 'Basic')
+
+        return res.status(401).json({message: "logout successfully"})
     }
 
     public getRouter(): Router {
