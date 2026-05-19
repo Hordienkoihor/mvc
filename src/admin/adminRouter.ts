@@ -16,7 +16,7 @@ export class AdminRouter {
 
     private storageBook = multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, "public/books/book-page/book-page_files");
+            cb(null, "public/images");
         },
         filename: function (req, file, cb) {
             cb(null, file.originalname);
@@ -85,7 +85,6 @@ export class AdminRouter {
 
     public async addBook(req: Request, res: Response) {
         const book = req.body as Book
-        console.log(book)
 
         if (!book.author) {
             return res.status(400).json({message: "No author specified"})

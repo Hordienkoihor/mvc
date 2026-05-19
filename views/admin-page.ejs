@@ -89,7 +89,7 @@
             <% books.forEach(function(book) { %>
                 <div style="align-items: center; display: flex; flex-direction: column; border: 1px solid lightgray; margin-left: 20px">
                     <div id="book-<%= book.b_id %>" class="card" style="margin: 20px; padding-left: 10px; width: 100%">
-                        <img class="card-img-top" style="max-block-size: 50px" src="books/books-page/books-page_files/<%= book.b_img %>"
+                        <img class="card-img-top" style="max-block-size: 50px" src="images/<%= book.b_img %>"
                              alt="<%= book.b_name %>">
                         <div class="card-body">
                             <h5 data-title="<%= book.b_name %>" class="card-title"><%= book.b_name %></h5>
