@@ -117,5 +117,25 @@ export class BookService {
         return {success: true, books: books}
     }
 
+    public async getViews(bookId: number) {
+        const views: number = await this.bookRepository.getBookViews(bookId);
+
+        if (views === undefined || views === null) {
+            return {success: false, msg: "No entry with this id found "}
+        }
+
+        return {success: true, count: views}
+    }
+
+    public async increaseViews(bookId: number) {
+        const res: number = await this.bookRepository.increaseViews(bookId);
+
+        if (res === undefined || res === null) {
+            return {success: false, msg: "No entry with this id found "}
+        }
+
+        return {success: true, count: res}
+    }
+
 
 }

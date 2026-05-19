@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS bookViews (
+    b_id INT NOT NULL,
+    b_count INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (b_id),
+    FOREIGN KEY (b_id) REFERENCES books(b_id) ON DELETE CASCADE
+);

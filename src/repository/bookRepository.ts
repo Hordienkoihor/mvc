@@ -51,7 +51,8 @@ export class BookRepository {
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
                        FROM books b
-                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authorBook ab
+                       ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
                        WHERE b.b_id = ?`;
 
@@ -140,7 +141,7 @@ export class BookRepository {
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
                        FROM books b
                            LEFT JOIN authorBook ab
-                       ON b.b_id = ab.b_id      
+                       ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
                        WHERE b.b_year = ?
                        GROUP BY b.b_id LIMIT ?
@@ -165,7 +166,8 @@ export class BookRepository {
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
                        FROM books b
-                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authorBook ab
+                       ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
                        WHERE B.b_name LIKE ?
                        GROUP BY b.b_id LIMIT ?
@@ -190,10 +192,11 @@ export class BookRepository {
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
                        FROM books b
-                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authorBook ab
+                       ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
                        WHERE B.b_name LIKE ?
-                       AND B.b_year = ?
+                         AND B.b_year = ?
                        GROUP BY b.b_id LIMIT ?
                        OFFSET ?;`;
 
@@ -207,8 +210,6 @@ export class BookRepository {
     }
 
 
-
-
     public async search(prompt: string): Promise<Book[]> {
         const searchPattern = `%${prompt}%`;
 
@@ -219,7 +220,8 @@ export class BookRepository {
                               b.b_year as year,
                               GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
                        FROM books b
-                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authorBook ab
+                       ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
                        WHERE B.b_name LIKE ?
                        GROUP BY b.b_id;`;
@@ -231,6 +233,41 @@ export class BookRepository {
             console.log(err);
             throw err;
         }
+    }
+
+    public async increaseViews(id: number) {
+        const query = `UPDATE bookViews
+                       SET b_count = b_count + 1
+                       WHERE b_id = ?
+        `
+
+        try {
+            const [data] = await this.pool.query<ResultSetHeader>(query, [id]);
+            return this.getBookViews(id)
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    public async getBookViews(id: number) {
+        const query = `SELECT b_count
+                       FROM bookViews
+                       WHERE b_id = ?`;
+
+        try {
+            const [data] = await this.pool.query<RowDataPacket[]>(query, [id]);
+
+            if (data.length === 0) {
+                return null;
+            }
+
+            return (data[0] as RowDataPacket).b_count;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+
     }
 
 }

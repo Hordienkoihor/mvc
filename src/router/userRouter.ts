@@ -19,6 +19,8 @@ export class UserRouter {
     private setupRoutes() {
         this.router.get("/", this.getDefault.bind(this));
         this.router.get("/books/:id", this.getBookPage.bind(this));
+        this.router.get("/books/api/:id", this.getBookViews.bind(this));
+        this.router.post("/books/api/:id", this.increaseViews.bind(this));
     }
 
 
@@ -53,23 +55,63 @@ export class UserRouter {
         })
     }
 
-    public async getBookPage(req: Request<{id: string}, {}, {}, {}>, res: Response) {
+    public async getBookPage(req: Request<{ id: string }, {}, {}, {}>, res: Response) {
         const bookId = parseInt(req.params.id)
 
         if (!bookId) {
             return res.status(404).json({message: "Failed to parse an id: " + bookId})
         }
 
-        const result = await this.bookService.getById(bookId)
+        const resultGet = await this.bookService.getById(bookId)
 
-        if (!result.success) {
+        if (!resultGet.success) {
             return res.status(404).json({message: "Not found book with id " + bookId})
         }
 
-        const book = result.book
+        const resultGetViews = await this.bookService.getViews(bookId)
+
+        if (!resultGetViews.success) {
+            return res.status(404).json({message: "can not fetch views for this book"})
+        }
+
+        const book = resultGet.book
+        const views = resultGetViews.count
         res.render('book-page', {
             book,
+            views
         })
+    }
+
+    public async getBookViews(req: Request<{ id: string }, {}, {}>, res: Response) {
+        const bookId = parseInt(req.params.id)
+
+        if (!bookId) {
+            return res.status(404).json({message: "Failed to parse an id: " + bookId})
+        }
+
+        const result = await this.bookService.getViews(bookId)
+        if (!result.success) {
+            return res.status(404).json({message: "Not found view with id " + bookId})
+        }
+
+        return res.status(200).json({
+            views: result.count
+        })
+    }
+
+    public async increaseViews(req: Request<{ id: string }, {}, {}>, res: Response) {
+        const bookId = parseInt(req.params.id)
+        console.log(bookId)
+        if (!bookId) {
+            return res.status(404).json({message: "Failed to parse an id: " + bookId})
+        }
+
+        const result = await this.bookService.increaseViews(bookId)
+        if (!result.success) {
+            return res.status(404).json({message: "Not found view with id " + bookId})
+        }
+
+        return res.status(200).json({views: result.count})
     }
 
     public getRouter() {

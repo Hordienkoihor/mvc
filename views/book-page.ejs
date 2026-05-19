@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="/books/book-page/book-page_files/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          crossorigin="anonymous"/>
 
     <link rel="shortcut icon" href="http://localhost:5050/books/book-page_files/favicon.ico">
 </head>
@@ -22,7 +23,8 @@
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="col-xs-5 col-sm-2 col-md-2 col-lg-2">
-                <div class="logo"><a href="http://localhost:5050/" class="navbar-brand"><span class="sh">Ш</span><span class="plus">++</span></a></div>
+                <div class="logo"><a href="http://localhost:5050/" class="navbar-brand"><span class="sh">Ш</span><span
+                                class="plus">++</span></a></div>
             </div>
             <div class="col-xs-12 col-sm-7 col-md-8 col-lg-8">
                 <div class="main-menu">
@@ -35,13 +37,13 @@
                                         if (e.keyCode == 13) {
                                             // e.preventDefault();
                                             // alert("а вот это придется сделать самому. Ваш @rshmelev");
-                                            (function (){
+                                            (function () {
                                                 const prompt = document.getElementById("search").value;
                                                 // fetch(`http://localhost:5050/?search=${prompt}`, {
                                                 //     method: 'GET',
                                                 // })
 
-                                                window.location.href =`http://localhost:5050/?search=${prompt}`
+                                                window.location.href = `http://localhost:5050/?search=${prompt}`
                                             })()
 
                                         }
@@ -55,7 +57,10 @@
                 </div>
             </div>
             <div class="col-xs-2 col-sm-3 col-md-2 col-lg-2 hidden-xs">
-                <div class="social"><a href="https://www.facebook.com/shpp.kr/" target="_blank"><span class="fa-stack fa-sm"><i class="fa fa-facebook fa-stack-1x"></i></span></a><a href="http://programming.kr.ua/ru/courses#faq" target="_blank"><span class="fa-stack fa-sm"><i class="fa fa-book fa-stack-1x"></i></span></a></div>
+                <div class="social"><a href="https://www.facebook.com/shpp.kr/" target="_blank"><span
+                                class="fa-stack fa-sm"><i class="fa fa-facebook fa-stack-1x"></i></span></a><a
+                            href="http://programming.kr.ua/ru/courses#faq" target="_blank"><span class="fa-stack fa-sm"><i
+                                    class="fa fa-book fa-stack-1x"></i></span></a></div>
             </div>
         </div>
     </nav>
@@ -73,29 +78,33 @@
                                 <div data-book-author="{author}" class="author">{author}</div>
                             </div>
                         </a>
-                        <a href="/book/{id}">
-                            <button type="button" class="details btn btn-success" onclick="alertRead()">Читать</button>
-                        </a>
+                        <!--                        <a href="/book/{id}">-->
+                        <button type="button" class="details btn btn-success">Читать
+                        </button>
+                        <!--                        </a>-->
                     </div>
                 </div>
             </script>
-            <div id="id" book-id="<%= book.id%>">
+            <div id="id" book-id="<%= book.id %>">
                 <div id="bookImg" class="col-xs-12 col-sm-3 col-md-3 item">
-                    <img src="/images/<%= book.img%>" alt="Responsive image" class="img-responsive">
+                    <img src="/images/<%= book.img %>" alt="Responsive image" class="img-responsive">
                     <hr>
                 </div>
                 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 info">
                     <div class="bookInfo col-md-12">
-                        <div id="title" class="titleBook"><%= book.name%></div>
+                        <div id="title" class="titleBook"><%= book.name %></div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="bookLastInfo">
-                            <div class="bookRow"><span class="properties">автор:</span><span id="author"><%= book.author%></span>
+                            <div class="bookRow"><span class="properties">автор:</span><span
+                                        id="author"><%= book.author %></span>
                             </div>
-                            <div class="bookRow"><span class="properties">год:</span><span id="year"><%= book.year%></span></div>
+                            <div class="bookRow"><span class="properties">год:</span><span
+                                        id="year"><%= book.year %></span></div>
                             <div class="bookRow"><span class="properties">страниц:</span><span id="pages">351</span>
                             </div>
-                            <div class="bookRow"><span class="properties">isbn:</span><span id="isbn"></span></div>
+                            <div class="bookRow"><span class="properties">isbn:</span><span
+                                        id="isbn"><%= views %></span></div>
                         </div>
                     </div>
                     <div class="btnBlock col-xs-12 col-sm-12 col-md-12">
@@ -104,13 +113,13 @@
                     <div class="bookDescription col-xs-12 col-sm-12 col-md-12 hidden-xs hidden-sm">
                         <h4>О книге</h4>
                         <hr>
-                        <p id="description"><%= book.description%></p>
+                        <p id="description"><%= book.description %></p>
                     </div>
                 </div>
                 <div class="bookDescription col-xs-12 col-sm-12 col-md-12 hidden-md hidden-lg">
                     <h4>О книге</h4>
                     <hr>
-                    <p class="description"><%= book.description%></p>
+                    <p class="description"><%= book.description %></p>
                 </div>
             </div>
 
@@ -122,18 +131,22 @@
     <div class="navbar-bottom row-fluid">
         <div class="navbar-inner">
             <div class="container-fuild">
-                <div class="content_footer"> Made with<a href="http://programming.kr.ua/" class="heart"><i aria-hidden="true" class="fa fa-heart"></i></a>by HolaTeam</div>
+                <div class="content_footer"> Made with<a href="http://programming.kr.ua/" class="heart"><i
+                                aria-hidden="true" class="fa fa-heart"></i></a>by HolaTeam
+                </div>
             </div>
         </div>
     </div>
 </section>
 <div class="sweet-overlay" tabindex="-1" style="opacity: 0.04; display: none;"></div>
-<div class="sweet-alert hideSweetAlert" data-custom-class="" data-has-cancel-button="false" data-has-confirm-button="true" data-allow-outside-click="false" data-has-done-function="false" data-animation="pop" data-timer="null" style="display: none; margin-top: -169px; opacity: -0.04;">
+<div class="sweet-alert hideSweetAlert" data-custom-class="" data-has-cancel-button="false"
+     data-has-confirm-button="true" data-allow-outside-click="false" data-has-done-function="false" data-animation="pop"
+     data-timer="null" style="display: none; margin-top: -169px; opacity: -0.04;">
     <div class="sa-icon sa-error" style="display: block;">
-            <span class="sa-x-mark">
-        <span class="sa-line sa-left"></span>
-            <span class="sa-line sa-right"></span>
-            </span>
+                <span class="sa-x-mark">
+            <span class="sa-line sa-left"></span>
+                <span class="sa-line sa-right"></span>
+                </span>
     </div>
     <div class="sa-icon sa-warning" style="display: none;">
         <span class="sa-body"></span>
@@ -157,7 +170,10 @@
     <div class="sa-button-container">
         <button class="cancel" tabindex="2" style="display: none; box-shadow: none;">Cancel</button>
         <div class="sa-confirm-button-container">
-            <button class="confirm" tabindex="1" style="display: inline-block; background-color: rgb(140, 212, 245); box-shadow: rgba(140, 212, 245, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px inset;">OK</button>
+            <button class="confirm" tabindex="1"
+                    style="display: inline-block; background-color: rgb(140, 212, 245); box-shadow: rgba(140, 212, 245, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px inset;">
+                OK
+            </button>
             <div class="la-ball-fall">
                 <div></div>
                 <div></div>
@@ -168,12 +184,7 @@
 </div>
 </body>
 <script>
-    function alertRead() {
-        document.preventDefault();
 
-        alert(
-            "Книга свободна и ты можешь прийти за ней. Наш адрес: г.Кропивницкий, переулок Васильевский 10, 5 этаж. Лучше предварительно прозвонить и предупредить нас, чтоб не попасть в неловкую ситуацию. Тел. 099 196 24 69."
-        )
-    }
+
 </script>
 </html>
