@@ -25,17 +25,26 @@ export class UserRouter {
     public async getDefault(req: Request<{}, {}, {}, getRequest>, res: Response) {
         const offset = parseInt(req.query.offset) || 0;
         const search = req.query.search || "";
+        const year = req.query.year || "";
         const limit = 20;
+
+        let result
+
+        if (year.length > 0) {
+            result = search.length > 0
+                ? await this.bookService.searchInRangeWithYear(offset, search, year)
+                : await this.bookService.getInRangeWithYear(offset, year)
+        } else {
+            result = search.length > 0
+                ? await this.bookService.searchInRange(offset, search)
+                : await this.bookService.getInRange(offset)
+        }
 
         // if (search.length > 0) {
         //     const result =
         // } else {
         //     const result =
         // }
-
-        const result = search.length > 0
-            ? await this.bookService.searchInRange(offset, search)
-            : await this.bookService.getInRange(offset)
 
         const books = result.books
 

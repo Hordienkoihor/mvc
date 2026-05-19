@@ -163,6 +163,7 @@
 
     let offset = +params.get('offset')
     let search = params.get('search')
+    let year = params.get('year')
 
     let link;
 
@@ -181,12 +182,17 @@
             offset = offset - booksOnPage;
         }
 
+        let link = `http://localhost:5050/?offset=${offset}`
+
         if (search) {
-            document.location.href = `http://localhost:5050/?offset=${offset}&search=${search}`;
-        } else {
-            document.location.href = `http://localhost:5050/?offset=${offset}`;
+            link += `&search=${search}`;
         }
 
+        if (year) {
+            link += `&year=${year}`;
+        }
+
+        document.location.href = link;
     }
 </script>
 

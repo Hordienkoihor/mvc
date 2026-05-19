@@ -2,6 +2,7 @@ import type {Pool, RowDataPacket} from "mysql2/promise";
 import type {Book} from "../types/book.type.js";
 import type {BookDto} from "../dto/book.dto.js";
 import type {ResultSetHeader} from "mysql2";
+import {debuglog} from "node:util";
 
 export class BookRepository {
     constructor(private readonly pool: Pool) {
@@ -130,6 +131,30 @@ export class BookRepository {
         }
     }
 
+    public async getInRangeWithYear(startId: number, endId: number, year: string): Promise<Book[]> {
+        const query = `SELECT b.b_id   as id,
+                              b.b_name as name,
+                              b.b_desc as description,
+                              b.b_img  as img,
+                              b.b_year as year,
+                              GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
+                       FROM books b
+                           LEFT JOIN authorBook ab
+                       ON b.b_id = ab.b_id      
+                           LEFT JOIN authors a ON ab.a_id = a.a_id
+                       WHERE b.b_year = ?
+                       GROUP BY b.b_id LIMIT ?
+                       OFFSET ?;`;
+
+        try {
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [year, endId, startId]);
+            return data;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     public async searchWithRange(startId: number, endId: number, prompt: string): Promise<Book[]> {
         const searchPattern = `%${prompt}%`;
 
@@ -154,6 +179,34 @@ export class BookRepository {
             throw err;
         }
     }
+
+    public async searchWithRangeAndYear(startId: number, endId: number, prompt: string, year: string): Promise<Book[]> {
+        const searchPattern = `%${prompt}%`;
+
+        const query = `SELECT b.b_id   as id,
+                              b.b_name as name,
+                              b.b_desc as description,
+                              b.b_img  as img,
+                              b.b_year as year,
+                              GROUP_CONCAT(a.a_name SEPARATOR ', ') AS author
+                       FROM books b
+                           LEFT JOIN authorBook ab ON b.b_id = ab.b_id
+                           LEFT JOIN authors a ON ab.a_id = a.a_id
+                       WHERE B.b_name LIKE ?
+                       AND B.b_year = ?
+                       GROUP BY b.b_id LIMIT ?
+                       OFFSET ?;`;
+
+        try {
+            const [data, meta] = await this.pool.query<RowDataPacket[] & Book[]>(query, [searchPattern, year, endId, startId]);
+            return data;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+
 
 
     public async search(prompt: string): Promise<Book[]> {
