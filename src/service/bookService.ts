@@ -2,12 +2,17 @@ import type {BookRepository} from "../repository/bookRepository.js";
 import type {JunctionRepository} from "../repository/junctionRepository.js";
 import type {BookDto} from "../dto/book.dto.js";
 import type {ResultSetHeader} from "mysql2";
+import type {BookViewsRepository} from "../repository/bookViewsRepository.js";
 
 export class BookService {
-    constructor(private readonly bookRepository: BookRepository, private readonly junctionRepository: JunctionRepository) {
+    constructor(
+        private readonly bookRepository: BookRepository,
+        private readonly junctionRepository: JunctionRepository,
+        private readonly bookViewsRepository: BookViewsRepository
+    ) {
     }
 
-    public async add(dto: BookDto, authorId: number) {
+    public async add(dto: BookDto, authorIds: number[]) {
         try {
             const repRes: ResultSetHeader = await this.bookRepository.add(dto)
 
@@ -17,7 +22,12 @@ export class BookService {
                 return {success: false, msg: "Failed to add a book"}
             }
 
-            const junction_res = await this.junctionRepository.add(authorId, book_id)
+            for (const authorId of authorIds) {
+                await this.junctionRepository.add(authorId, book_id)
+            }
+
+
+            await this.bookViewsRepository.add(book_id)
 
             return {success: true, id: book_id}
         } catch (err) {
@@ -75,6 +85,8 @@ export class BookService {
     public async getById(bookId: number) {
         try {
             const result = await this.bookRepository.get(bookId)
+
+            const junctionRes = await this.junctionRepository
 
             if (!result) {
                 return {success: false, msg: "No book with id " + bookId}

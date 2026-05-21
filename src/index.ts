@@ -12,6 +12,7 @@ import {JunctionRepository} from "./repository/junctionRepository.js";
 import {AdminRouter} from "./admin/adminRouter.js";
 import {AuthorRepository} from "./repository/authorRepository.js";
 import {AuthorService} from "./service/authorService.js";
+import {BookViewsRepository} from "./repository/bookViewsRepository.js";
 
 
 config()
@@ -37,8 +38,8 @@ app.set('views', path.join(process.cwd(), 'views'));
 const bookRepository = new BookRepository(dbPool);
 const junctionRepository = new JunctionRepository(dbPool);
 const authorRepository = new AuthorRepository(dbPool);
-
-const bookService = new BookService(bookRepository, junctionRepository);
+const bookViewsRepository = new BookViewsRepository(dbPool);
+const bookService = new BookService(bookRepository, junctionRepository, bookViewsRepository);
 const userRouter = new UserRouter(bookService);
 const authorService = new AuthorService(authorRepository);
 

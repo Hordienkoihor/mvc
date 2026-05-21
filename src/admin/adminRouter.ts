@@ -7,6 +7,7 @@ import multer, {type Multer} from "multer"
 import type {BookDto} from "../dto/book.dto.js";
 import type {AuthorDto} from "../dto/author.dto.js";
 import basicAuth from "express-basic-auth";
+import type {AddBookReq} from "../types/addBook.type.js";
 
 export class AdminRouter {
     private readonly router: Router;
@@ -84,10 +85,10 @@ export class AdminRouter {
     }
 
     public async addBook(req: Request, res: Response) {
-        const book = req.body as Book
+        const data = req.body
 
-        if (!book.author) {
-            return res.status(400).json({message: "No author specified"})
+        if (!data.authors) {
+            return res.status(400).json({message: "No authors specified"})
         }
 
         const fileDat = req.file
@@ -96,17 +97,22 @@ export class AdminRouter {
             return res.status(400).json({message: "No file uploaded"})
         }
 
-        const authorId = book.author;
+        const authorIds = Array.isArray(data.authors) ? data.authors : [data.authors];
+
+
+        const parsedAuthorIds = authorIds.map((id: string) => {
+            return parseInt(id)
+        })
 
         const bookDto: BookDto = {
-            name: book.name,
-            description: book.description,
+            name: data.name,
+            description: data.description,
             image: fileDat.filename,
-            author: authorId,
-            year: book.year ? book.year : '2000',
+            // author: data.book.author ? data.book.author : "gugu",
+            year: data.year ? data.year : '2000',
         }
 
-        const status = await this.bookService.add(bookDto, parseInt(authorId))
+        const status = await this.bookService.add(bookDto, parsedAuthorIds)
 
         if (!status.success) {
             return res.status(500).json({message: status.msg})

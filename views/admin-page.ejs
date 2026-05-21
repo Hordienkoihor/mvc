@@ -58,7 +58,7 @@
 
                 <div class="form-group">
                     <label for="bookAuthor">Автор книги</label>
-                    <select class="form-control" id="bookAuthor" >
+                    <select class="form-control" id="bookAuthor" multiple>
                         <!--                        ejs her-->
                         <!--                        <option selected>Jane Down</option>-->
                         <!--                        <option>Shakespeare</option>-->
@@ -155,7 +155,13 @@
         formData.append('description', document.getElementById('bookDescription').value);
         formData.append('year', document.getElementById('bookYear').value);
         formData.append('img', document.getElementById('bookImg').files[0]);
-        formData.append('author', document.getElementById('bookAuthor').value);
+
+        const authors = Array.from(document.getElementById('bookAuthor').selectedOptions)
+        const ids = authors.map(author => author.value);
+
+        ids.forEach(function (id) {
+          formData.append('authors', id)
+        })
 
 
 
