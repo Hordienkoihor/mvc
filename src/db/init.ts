@@ -31,6 +31,8 @@ export async function initDb(pool: Pool) {
         const populateBookViews = await readFile(path.join(__dirname, '../../src/db/populateBookViews.sql'), 'utf8');
         await pool.query(populateBookViews)
 
+        const initDbCleanup = await readFile(path.join(__dirname, '../../src/db/script/db_cleanup_script.sql'), 'utf8');
+
        if (populateAuthor && populateBooks && populateJunction) {
            await pool.query(populateAuthor)
            await pool.query(populateBooks)
