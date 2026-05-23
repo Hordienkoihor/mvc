@@ -142,12 +142,13 @@
             },
             "pageLength": 5,
             "lengthMenu": [5, 10, 25, 50],
-            "drawCallback": function () {
-                $(".dataTables_paginate .pagination li a")
-                    .addClass("btn btn-default")
-                    .css('margin', '0 2px');
+            // "columnDefs": [{
+            //     render:  (data, type, row) => { return data +  row[0] },
+            //     targets: 1
+            // },
 
-            }
+
+            ]
         })
     })
 
