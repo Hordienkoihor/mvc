@@ -1,13 +1,13 @@
-import type {AuthorService} from "../service/authorService.js";
-import type {BookService} from "../service/bookService.js";
+import type {AuthorService} from "../../service/authorService.js";
+import type {BookService} from "../../service/bookService.js";
 import express, {type Router} from "express";
 import type {Request, Response} from "express";
-import type {Book} from "../types/book.type.js";
+import type {Book} from "../../types/book.type.js";
 import multer, {type Multer} from "multer"
-import type {BookDto} from "../dto/book.dto.js";
-import type {AuthorDto} from "../dto/author.dto.js";
+import type {BookDto} from "../../dto/book.dto.js";
+import type {AuthorDto} from "../../dto/author.dto.js";
 import basicAuth from "express-basic-auth";
-import type {AddBookReq} from "../types/addBook.type.js";
+import type {AddBookReq} from "../../types/addBook.type.js";
 
 export class AdminRouter {
     private readonly router: Router;

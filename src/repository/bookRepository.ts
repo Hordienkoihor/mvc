@@ -31,7 +31,7 @@ export class BookRepository {
 
     public async delete(id: number) {
         const query = `UPDATE books
-                       SET deleted_at = NOW()
+                       SET b.deleted_at = NOW()
                        WHERE b_id = ?`;
 
         try {
@@ -54,7 +54,7 @@ export class BookRepository {
                            LEFT JOIN authorBook ab
                        ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
-                       WHERE b.b_id = ? AND deleted_at IS NULL`;
+                       WHERE b.b_id = ? AND b.deleted_at IS NULL`;
 
         try {
             const [res] = await this.pool.query<RowDataPacket[]>(query, [id]);
@@ -76,7 +76,7 @@ export class BookRepository {
                            b_desc = ?,
                            b_img  = ?,
                            b_year = ?
-                       WHERE b_id = ? AND deleted_at IS NULL`
+                       WHERE b_id = ? AND b.deleted_at IS NULL`
 
         const values = [
             book.name,
@@ -121,7 +121,7 @@ export class BookRepository {
                            LEFT JOIN authorBook ab
                        ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
-                       WHERE deleted_at IS NULL
+                       WHERE b.deleted_at IS NULL
                        GROUP BY b.b_id LIMIT ?
                        OFFSET ?;`;
 
@@ -145,7 +145,7 @@ export class BookRepository {
                            LEFT JOIN authorBook ab
                        ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
-                       WHERE b.b_year = ? AND deleted_at IS NULL
+                       WHERE b.b_year = ? AND b.deleted_at IS NULL
                        GROUP BY b.b_id LIMIT ?
                        OFFSET ?;`;
 
@@ -171,7 +171,7 @@ export class BookRepository {
                            LEFT JOIN authorBook ab
                        ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
-                       WHERE B.b_name LIKE ? AND deleted_at IS NULL
+                       WHERE B.b_name LIKE ? AND b.deleted_at IS NULL
                        GROUP BY b.b_id LIMIT ?
                        OFFSET ?;`;
 
@@ -199,7 +199,7 @@ export class BookRepository {
                            LEFT JOIN authors a ON ab.a_id = a.a_id
                        WHERE B.b_name LIKE ?
                          AND B.b_year = ?
-                         AND deleted_at IS NULL
+                         AND b.deleted_at IS NULL
                        GROUP BY b.b_id LIMIT ?
                        OFFSET ?;`;
 
@@ -226,7 +226,7 @@ export class BookRepository {
                            LEFT JOIN authorBook ab
                        ON b.b_id = ab.b_id
                            LEFT JOIN authors a ON ab.a_id = a.a_id
-                       WHERE B.b_name LIKE ? AND deleted_at IS NULL
+                       WHERE B.b_name LIKE ? AND b.deleted_at IS NULL
                        GROUP BY b.b_id;`;
 
         try {
@@ -241,7 +241,7 @@ export class BookRepository {
     public async increaseViews(id: number) {
         const query = `UPDATE bookViews
                        SET b_count = b_count + 1
-                       WHERE b_id = ? AND deleted_at IS NULL
+                       WHERE b_id = ? AND b.deleted_at IS NULL
         `
 
         try {
@@ -256,7 +256,7 @@ export class BookRepository {
     public async getBookViews(id: number) {
         const query = `SELECT b_count
                        FROM bookViews
-                       WHERE b_id = ? AND deleted_at IS NULL`;
+                       WHERE b_id = ? AND b.deleted_at IS NULL`;
 
         try {
             const [data] = await this.pool.query<RowDataPacket[]>(query, [id]);

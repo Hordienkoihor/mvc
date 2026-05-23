@@ -9,7 +9,7 @@ import {UserRouter} from "./router/userRouter.js";
 import {BookRepository} from "./repository/bookRepository.js";
 import {BookService} from "./service/bookService.js";
 import {JunctionRepository} from "./repository/junctionRepository.js";
-import {AdminRouter} from "./admin/adminRouter.js";
+import {AdminRouter} from "./router/admin/adminRouter.js";
 import {AuthorRepository} from "./repository/authorRepository.js";
 import {AuthorService} from "./service/authorService.js";
 import {BookViewsRepository} from "./repository/bookViewsRepository.js";
