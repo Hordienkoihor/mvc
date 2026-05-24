@@ -7,15 +7,26 @@ import type {JunctionRepository} from "../repository/junctionRepository.js";
 import type {AuthorRepository} from "../repository/authorRepository.js";
 import type {Author} from "../types/author.type.js";
 
+/**
+ * class provides endpoints for library
+ * */
 export class UserRouter {
-    private router: Router;
+    /*instance of express-router*/
+    private readonly router: Router;
 
+    /**
+     * constructor
+     * @bookService - instance of BookService
+     * */
     constructor(readonly bookService: BookService) {
         this.router = express.Router()
         this.setupRoutes()
     }
 
 
+    /**
+     * links endpoints with corresponding methods
+     * */
     private setupRoutes() {
         this.router.get("/", this.getDefault.bind(this));
         this.router.get("/books/:id", this.getBookPage.bind(this));
@@ -24,6 +35,10 @@ export class UserRouter {
     }
 
 
+    /**
+     * method corresponding to '/' endpoint
+     * renders main page of the library
+     * */
     public async getDefault(req: Request<{}, {}, {}, getRequest>, res: Response) {
         const offset = parseInt(req.query.offset) || 0;
         const search = req.query.search || "";
@@ -42,12 +57,6 @@ export class UserRouter {
                 : await this.bookService.getInRange(offset)
         }
 
-        // if (search.length > 0) {
-        //     const result =
-        // } else {
-        //     const result =
-        // }
-
         const books = result.books
 
         res.render('books-page', {
@@ -55,6 +64,14 @@ export class UserRouter {
         })
     }
 
+    /**
+     * method corresponding to '/books/:id' endpoint
+     *
+     * @req - must contain book id in params
+     * @res - renders  page of single book on success
+     *        or status 401 if id was not specified
+     *        or status 404 if no book with specified id was found
+     * */
     public async getBookPage(req: Request<{ id: string }, {}, {}, {}>, res: Response) {
         const bookId = parseInt(req.params.id)
 
@@ -82,6 +99,14 @@ export class UserRouter {
         })
     }
 
+    /**
+     * method corresponding to '/books/api/:id' endpoint
+     * METHOD GET
+     * @req - must contain book id in params
+     * @res - status 200 and views of specified book
+     *        or status 401 if id was not specified
+     *        or status 404 if no book with specified id was found
+     * */
     public async getBookViews(req: Request<{ id: string }, {}, {}>, res: Response) {
         const bookId = parseInt(req.params.id)
 
@@ -99,6 +124,14 @@ export class UserRouter {
         })
     }
 
+    /**
+     * method corresponding to '/books/api/:id' endpoint
+     * METHOD POST
+     * @req - must contain book id in params
+     * @res - status 200 and increased by 1 views of specified book
+     *        or status 401 if id was not specified
+     *        or status 404 if no book with specified id was found
+     * */
     public async increaseViews(req: Request<{ id: string }, {}, {}>, res: Response) {
         const bookId = parseInt(req.params.id)
         console.log(bookId)
@@ -114,6 +147,9 @@ export class UserRouter {
         return res.status(200).json({views: result.count})
     }
 
+    /**
+     * returns instance of express-router
+     * */
     public getRouter() {
         return this.router;
     }
