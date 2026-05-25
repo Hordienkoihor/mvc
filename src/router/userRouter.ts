@@ -76,19 +76,19 @@ export class UserRouter {
         const bookId = parseInt(req.params.id)
 
         if (!bookId) {
-            return res.status(404).json({message: "Failed to parse an id: " + bookId})
+            return res.status(404).json({error: "Failed to parse an id: " + bookId})
         }
 
         const resultGet = await this.bookService.getById(bookId)
 
         if (!resultGet.success) {
-            return res.status(404).json({message: "Not found book with id " + bookId})
+            return res.status(404).json({error: "Not found book with id " + bookId})
         }
 
         const resultGetViews = await this.bookService.getViews(bookId)
 
         if (!resultGetViews.success) {
-            return res.status(404).json({message: "can not fetch views for this book"})
+            return res.status(404).json({error: "can not fetch views for this book"})
         }
 
         const book = resultGet.book
@@ -111,12 +111,12 @@ export class UserRouter {
         const bookId = parseInt(req.params.id)
 
         if (!bookId) {
-            return res.status(404).json({message: "Failed to parse an id: " + bookId})
+            return res.status(404).json({error: "Failed to parse an id: " + bookId})
         }
 
         const result = await this.bookService.getViews(bookId)
         if (!result.success) {
-            return res.status(404).json({message: "Not found view with id " + bookId})
+            return res.status(404).json({error: "Not found view with id " + bookId})
         }
 
         return res.status(200).json({
@@ -136,15 +136,15 @@ export class UserRouter {
         const bookId = parseInt(req.params.id)
         console.log(bookId)
         if (!bookId) {
-            return res.status(404).json({message: "Failed to parse an id: " + bookId})
+            return res.status(404).json({error: "Failed to parse an id: " + bookId})
         }
 
         const result = await this.bookService.increaseViews(bookId)
         if (!result.success) {
-            return res.status(404).json({message: "Not found view with id " + bookId})
+            return res.status(404).json({error: "Not found view with id " + bookId})
         }
 
-        return res.status(200).json({views: result.count})
+        return res.status(200).json({message: result.count})
     }
 
     /**

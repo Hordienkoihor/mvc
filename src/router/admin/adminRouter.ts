@@ -74,13 +74,13 @@ export class AdminRouter {
         const bookFetchResult = await this.bookService.getAll()
 
         if (!bookFetchResult.success) {
-            return res.status(401).json({message: bookFetchResult.msg})
+            return res.status(401).json({error: bookFetchResult.msg})
         }
 
         const authorFetchResult = await this.authorService.getAll()
 
         if (!authorFetchResult.success) {
-            return res.status(401).json({message: authorFetchResult.msg})
+            return res.status(401).json({error: authorFetchResult.msg})
         }
 
         const books = bookFetchResult.books
@@ -102,13 +102,13 @@ export class AdminRouter {
         const data = req.body
 
         if (!data.authors) {
-            return res.status(400).json({message: "No authors specified"})
+            return res.status(400).json({error: "No authors specified"})
         }
 
         const fileDat = req.file
 
         if (!fileDat) {
-            return res.status(400).json({message: "No file uploaded"})
+            return res.status(400).json({error: "No file uploaded"})
         }
 
         const authorIds = Array.isArray(data.authors) ? data.authors : [data.authors];
@@ -129,7 +129,7 @@ export class AdminRouter {
         const status = await this.bookService.add(bookDto, parsedAuthorIds)
 
         if (!status.success) {
-            return res.status(500).json({message: status.msg})
+            return res.status(500).json({error: status.msg})
         }
 
         return res.status(200).json({success: true, id: status.id})
@@ -146,13 +146,13 @@ export class AdminRouter {
         const author = req.body as AuthorDto
 
         if (!author) {
-            return res.status(400).json({message: "No author specified"})
+            return res.status(400).json({error: "No author specified"})
         }
 
         const status = await this.authorService.add(author)
 
         if (!status.success) {
-            return res.status(500).json({message: status.msg})
+            return res.status(500).json({error: status.msg})
         }
 
         return res.status(200).json({success: true, id: status.id})
@@ -169,13 +169,13 @@ export class AdminRouter {
         const bookId = parseInt(req.body.id)
 
         if (!bookId) {
-            return res.status(400).json({message: "No bookId specified"})
+            return res.status(400).json({error: "No bookId specified"})
         }
 
         const status = await this.bookService.delete(bookId)
 
         if (!status.success) {
-            return res.status(500).json({message: "internal server error"})
+            return res.status(500).json({error: "internal server error"})
         }
 
         return res.status(200).json({message: "book deleted successfully"})
